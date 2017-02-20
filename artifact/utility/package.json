@@ -1,0 +1,11 @@
+{
+  "name": "uup778885",
+  "version": "1.0.0",
+  "description": "utility module",
+  "main": "utility.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "I.Ivanov",
+  "license": "ISC"
+}

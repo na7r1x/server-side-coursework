@@ -1,0 +1,439 @@
+<!doctype html>
+<title>jsbook</title>
+
+<style>
+  body, html {
+    padding: 0;
+    margin: 0;
+    font-family: sans-serif;
+    color: black;
+    background-color: white;
+  }
+
+  body > header {
+    position: absolute;
+    width: 100%;
+    background-color: #64a97e;
+    box-sizing: border-box;
+    top: 0;
+    padding: 1em;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  body > header h1 {
+    font-family: "Tahoma", "Arial", sans-serif;
+    color: white;
+    font-weight: normal;
+    line-height: 1em;
+    padding: 0;
+    margin: 0;
+    font-size: 2em;
+  }
+
+  body > header > input {
+    top: 1em;
+    right: 1em;
+    font-size: 1rem;
+    padding: .3em;
+    width: 8em;
+  }
+
+  main {
+    margin: 0;
+    min-height: 100vh;
+    box-sizing: border-box;
+    padding: .5em;
+    padding-top: 4.5em;
+    max-width: 40em;
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  main > header h1 {
+    margin: 0;
+  }
+
+  main p.author {
+    display: inline;
+  }
+
+  main p.author:after {
+    content: ':';
+    display: inline;
+  }
+
+  main p.title {
+    display: inline;
+    font-weight: bold;
+  }
+
+  main p.text {
+    white-space: pre-line;
+  }
+
+  main article {
+    position: relative;
+  }
+
+  main article > .delete {
+    position: absolute;
+    top: .5em;
+    right: 0;
+    border: 1px solid transparent;
+    border-radius: .3em;
+    padding: .2em;
+    display: none;
+    text-align: center;
+    width: 1em;
+    color: #888;
+    background: rgba(255,255,255,.5);
+  }
+
+  main article:hover:not(.deleting) > .delete {
+    display: block;
+  }
+
+  main article > .delete:hover {
+    border: 1px solid black;
+    color: black;
+    background: white;
+  }
+
+  main article.deleting {
+    opacity: .5;
+  }
+
+  main article + article {
+    border-top: 1px solid #888;
+    padding-top: 1em;
+  }
+
+  article.new {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: baseline;
+    padding: 1em 0;
+    justify-content: space-before;
+    flex-wrap: wrap;
+  }
+
+  article.new > *:not(:last-child) {
+    margin-bottom: .5em;
+  }
+
+  #title {
+    margin-right: auto;
+  }
+
+  #text {
+    flex: 100%;
+  }
+
+  main > nav {
+    display: block;
+    text-align: center;
+  }
+
+  a.pagebtn {
+    display: inline-block;
+    text-align: center;
+    width: 1em;
+    height: 1em;
+    padding: .5em;
+    border: 1px solid #888;
+    border-radius: .3em;
+    text-decoration: none;
+    color: black;
+  }
+
+  a#showall {
+    display: inline-block;
+    padding: .5em;
+    border: 1px solid #888;
+    border-radius: .3em;
+    text-decoration: none;
+    color: black;
+    height: 1em;
+  }
+
+  a.pagebtn.disabled,
+  a#showall.disabled {
+    color: #aaa;
+    cursor: default;
+  }
+
+  a#showall.disabled {
+    font-style: italic;
+  }
+
+  #error {
+    visibility: hidden;
+    color: #800;
+    font-size: 80%;
+  }
+
+  body.error #error {
+    visibility: visible;
+  }
+
+  body.error input:invalid,
+  body.error textarea:invalid {
+    border-color: #F00;
+    background-color: #FF0;
+  }
+
+  body.error input:focus:invalid,
+  body.error textarea:focus:invalid {
+    outline: none;
+  }
+
+
+</style>
+
+<header>
+  <h1>jsbook</h1>
+  <input type="text" id="username" required placeholder="your name">
+</header>
+
+<main>
+  <header>
+    <h1>Stories</h1>
+  </header>
+  <article class="new">
+    <p id="error">Please fill out all the fields, including your name</p>
+    <input type="text" id="title" autofocus required placeholder="title">
+    <textarea id="text" rows="4" required placeholder="What would you like to share?"></textarea>
+    <button id="submit">submit</button>
+  </article>
+  <template id="story-template">
+    <article class="story">
+      <p class="author">Luke Skywalker</p>
+      <p class="title">Hello world!</p>
+      <p class="text">So I decided to join jsbook like everyone else. What does one post here?</p>
+      <div class="delete">X</div>
+    </article>
+  </template>
+  <article class="story">
+    <p class="author">Luke Skywalker</p>
+    <p class="title">Hello world!</p>
+    <p class="text">So I decided to join jsbook like everyone else. What does one post here?</p>
+    <div class="delete">X</div>
+  </article>
+  <article class="story">
+    <p class="author">Luke Skywalker</p>
+    <p class="title">Hello world!</p>
+    <p class="text">So I decided to join jsbook like everyone else. What does one post here?</p>
+    <div class="delete">X</div>
+  </article>
+  <article class="story">
+    <p class="author">Luke Skywalker</p>
+    <p class="title">Hello world!</p>
+    <p class="text">So I decided to join jsbook like everyone else. What does one post here?</p>
+    <div class="delete">X</div>
+  </article>
+  <article class="story">
+    <p class="author">Luke Skywalker</p>
+    <p class="title">Hello world!</p>
+    <p class="text">So I decided to join jsbook like everyone else. What does one post here?</p>
+    <div class="delete">X</div>
+  </article>
+  <article class="story">
+    <p class="author">Luke Skywalker</p>
+    <p class="title">Hello world!</p>
+    <p class="text">So I decided to join jsbook like everyone else. What does one post here?</p>
+    <div class="delete">X</div>
+  </article>
+  <article class="story">
+    <p class="author">Luke Skywalker</p>
+    <p class="title">Hello world!</p>
+    <p class="text">So I decided to join jsbook like everyone else. What does one post here?</p>
+    <div class="delete">X</div>
+  </article>
+  <article class="story">
+    <p class="author">Luke Skywalker</p>
+    <p class="title">Hello world!</p>
+    <p class="text">So I decided to join jsbook like everyone else. What does one post here?</p>
+    <div class="delete">X</div>
+  </article>
+  <article class="story">
+    <p class="author">Luke Skywalker</p>
+    <p class="title">Hello world!</p>
+    <p class="text">So I decided to join jsbook like everyone else. What does one post here?</p>
+    <div class="delete">X</div>
+  </article>
+  <article class="story">
+    <p class="author">Luke Skywalker</p>
+    <p class="title">Hello world!</p>
+    <p class="text">So I decided to join jsbook like everyone else. What does one post here?</p>
+    <div class="delete">X</div>
+  </article>
+  <article class="story">
+    <p class="author">Luke Skywalker</p>
+    <p class="title">Hello world!</p>
+    <p class="text">So I decided to join jsbook like everyone else. What does one post here?</p>
+    <div class="delete">X</div>
+  </article>
+  <article class="story">
+    <p class="author">Luke Skywalker</p>
+    <p class="title">Hello world!</p>
+    <p class="text">So I decided to join jsbook like everyone else. What does one post here?</p>
+    <div class="delete">X</div>
+  </article>
+  <article class="story">
+    <p class="author">Luke Skywalker</p>
+    <p class="title">Hello world!</p>
+    <p class="text">So I decided to join jsbook like everyone else. What does one post here?</p>
+    <div class="delete">X</div>
+  </article>
+  <nav>
+    <a id="prevpage" class="pagebtn" href="#">&#x25c4;</a>
+    <span id="currpage">page 3</span>
+    <a id="nextpage" class="pagebtn" href="#">&#x25ba;</a>
+    <a id="showall" href="#0">Show all</a>
+  </nav>
+</main>
+
+
+<script>
+  window.addEventListener('load', initialize);
+
+  function initialize() {
+    loadStories();
+
+    // set up event handlers
+    // submit button
+    document.querySelector('#submit').addEventListener('click', submitNewStory);
+
+    // handle remembering of user name
+    document.querySelector('#username').addEventListener('change', saveUserName);
+    document.querySelector('#username').value = localStorage.username || '';
+
+    // hash change happens when we click a link to go to the next page
+    window.addEventListener('hashchange', loadStories);
+  }
+
+  function loadStories() {
+    var url = '/api/stories';
+
+    var currentPage = getCurrentPage();
+    if (currentPage) url += '?p=' + encodeURIComponent(currentPage);
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', url, true);
+    xhr.onload = function() {
+      if (xhr.status === 200) {
+        putStoriesInPage(JSON.parse(xhr.responseText));
+      } else {
+        console.error('error getting stories', xhr.status, xhr.responseText);
+        document.querySelector('body > main').innerHTML = 'sorry, something went wrong...';
+      }
+    }
+    xhr.send();
+  }
+
+  function getCurrentPage() {
+    if (window.location.hash === '' || window.location.hash == null) return 1;
+
+    var page = +window.location.hash.substring(1);
+    if (isNaN(page)) page = 0;
+
+    return page;
+  }
+
+  function putStoriesInPage(stories) {
+    var templateEl = document.getElementById('story-template');
+
+    // clear out contents after the template
+    while (templateEl.nextElementSibling && templateEl.nextElementSibling.classList.contains('story')) {
+      templateEl.nextElementSibling.remove();
+    }
+
+    // set page indicator and next/prev links
+    var page = getCurrentPage();
+
+    if (page > 1) {
+      document.querySelector('#prevpage').classList.remove('disabled');
+      document.querySelector('#prevpage').href = '#' + (page-1);
+      document.querySelector('#nextpage').classList.remove('disabled');
+      document.querySelector('#nextpage').href = '#' + (page+1);
+      document.querySelector('#currpage').textContent = 'page ' + page;
+      document.querySelector('#showall').classList.remove('disabled');
+      document.querySelector('#showall').href = '#0';
+    } else if (page > 0) {
+      document.querySelector('#prevpage').classList.add('disabled');
+      delete document.querySelector('#prevpage').href;
+      document.querySelector('#nextpage').classList.remove('disabled');
+      document.querySelector('#nextpage').href = '#' + (page+1);
+      document.querySelector('#currpage').textContent = 'page ' + page;
+      document.querySelector('#showall').classList.remove('disabled');
+      document.querySelector('#showall').href = '#0';
+    } else {
+      document.querySelector('#prevpage').classList.remove('disabled');
+      document.querySelector('#prevpage').href = '#1';
+      document.querySelector('#nextpage').classList.add('disabled');
+      delete document.querySelector('#nextpage').href;
+      document.querySelector('#currpage').textContent = 'showing all';
+      document.querySelector('#showall').classList.add('disabled');
+      delete document.querySelector('#showall').href;
+    }
+
+    // add the actual stories
+    var addNextBefore = templateEl.nextElementSibling;
+
+    stories.forEach(function (story) {
+      var storyEl = document.importNode(templateEl.content, true);
+      storyEl.querySelector('.author').textContent = story.author || 'Anonymous';
+      storyEl.querySelector('.title').textContent = story.title || '';
+      storyEl.querySelector('.text').textContent = story.text || '';
+      storyEl.querySelector('.delete').addEventListener('click', deleteStory);
+      storyEl.querySelector('.delete').dataset.id = story.id;
+      templateEl.parentElement.insertBefore(storyEl, addNextBefore);
+    });
+  }
+
+  function deleteStory(ev) {
+    if (ev.target.dataset.id) {
+      ev.target.parentElement.classList.add('deleting');
+      var xhr = new XMLHttpRequest();
+      var url = '/api/stories?id=' + encodeURIComponent(ev.target.dataset.id);
+      xhr.open('DELETE', url, true);
+      xhr.onload = loadStories;
+      xhr.send();
+    }
+  }
+
+  function submitNewStory() {
+    var author = document.querySelector('#username');
+    var title = document.querySelector('#title');
+    var text = document.querySelector('#text');
+
+    if (!author.checkValidity() ||
+        !title.checkValidity() ||
+        !text.checkValidity()) {
+      document.body.classList.add('error');
+      return;
+    }
+
+    document.body.classList.remove('error');
+
+    var url = '/api/stories';
+
+    url += '?author=' + encodeURIComponent(author.value);
+    url += '&title=' + encodeURIComponent(title.value);
+    url += '&text=' + encodeURIComponent(text.value);
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', url, true);
+    xhr.onload = loadStories;
+    xhr.send();
+    window.location.hash = '#1';
+  }
+
+  function saveUserName() {
+    localStorage.username = document.querySelector('#username').value;
+  }
+
+</script>
